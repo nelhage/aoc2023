@@ -64,3 +64,35 @@ template <typename Lst>
 struct reverse {
     using type = reverse_helper<Lst>::type;
 };
+
+
+template <typename Lst, typename Find, typename Accum>
+struct split1_helper {};
+
+template<typename Find, typename Accum>
+struct split1_helper<nil, Find, Accum> {
+    using first = reverse<Accum>::type;
+    using rest = nil;
+};
+
+template<typename Find, typename Accum, typename Rest>
+struct split1_helper<pair<Find, Rest>, Find, Accum> {
+    using first = reverse<Accum>::type;
+    using rest = Rest;
+};
+
+template<typename Find, typename Accum, typename Fst, typename Rest>
+struct split1_helper<pair<Fst, Rest>, Find, Accum> {
+    using recurse = split1_helper<
+        Rest,
+        Find,
+        pair<Fst, Accum>
+        >;
+
+    using first = recurse::first;
+    using rest = recurse::rest;
+};
+
+
+template<typename Lst, typename Elt>
+using split1 = split1_helper<Lst, Elt, nil>;
