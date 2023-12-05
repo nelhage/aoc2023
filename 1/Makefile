@@ -1,10 +1,8 @@
-CXXFLAGS=-std=c++20
+CXXFLAGS=-std=c++20  -fbracket-depth=25000
 OUT=out
 
-$(OUT):
+$(OUT)/%.i: %.txt
 	mkdir -p $(OUT)
-
-$(OUT)/%.i: %.txt $(OUT)
 	xxd -i < $< > $@
 
 HEADERS := list.h read_input.h
