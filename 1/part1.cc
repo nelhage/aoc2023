@@ -1,11 +1,6 @@
 #include <stdio.h>
 
-template <auto v>
-struct literal {
-    constexpr static auto value = v;
-};
-
-struct nil;
+#include "list.h"
 
 template <typename T> struct as_digit {using type = nil; };
 template <char v> struct as_digit<literal<v>> {
@@ -25,40 +20,6 @@ template <char v> struct as_digit<literal<v>> {
     using type = impl<l, r>::type;
 };
 
-template <typename... Elts>
-struct list {};
-
-template <auto... Elts>
-struct value_list {};
-
-
-
-template <template<typename, typename> typename Fn,
-    typename Init,
-    typename List>
-struct fold {};
-
-template<template<typename, typename> typename Fn>
-struct fold_helper {
-    template <typename T>
-    struct F {
-        using type = T;
-
-        template <typename R>
-        auto operator<<(F<R>) {
-            return F<typename Fn<T, R>::type>();
-        };
-    };
-};
-
-template <template<typename, typename> typename Fn,
-          typename Init, typename... Elts>
-struct fold<Fn, Init, list<Elts...>> {
-    template <typename T>
-    using F = fold_helper<Fn>::template F<T>;
-
-    using type = decltype((F<Init>() << ... << F<Elts>()))::type;
-};
 
 template <typename Accum, typename FirstDigit, typename LastDigit>
 struct State {
