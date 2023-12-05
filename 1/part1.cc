@@ -1,16 +1,11 @@
 #include <stdio.h>
 
-// #include "list.h"
-// #include "read_input.h"
-
 template <auto v>
 struct literal {
     constexpr static auto value = v;
 };
 
 struct nil;
-
-// template <typename C, typename L, typename R>
 
 template <typename T> struct as_digit {using type = nil; };
 template <char v> struct as_digit<literal<v>> {
@@ -128,13 +123,4 @@ using problem = read_input<
 int main() {
     using answer = solve<problem>::type;
     printf("result=%d\n", answer::value);
-
-    // using split = split1<problem, literal<'\n'>>;
-
-    // print<split::first>::call();
-
-    // using test = literal_list<1, 2, 3, 4>::type;
-
-    // print<reverse<test>::type>::call();
-    // print_list<answer>();
 }
