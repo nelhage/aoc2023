@@ -89,46 +89,39 @@ template<typename S> struct next_state<S, literal<'e'>> { using type = Se; };
 template<typename S> struct next_state<S, literal<'n'>> { using type = Sn; };
 
 // one
-template<>           struct next_state<So, literal<'n'>> { using type = Son; };
-template<>           struct next_state<Son, literal<'e'>> { using type = Se; };
-template<>           struct next_state<Son, literal<'i'>> { using type = Sni; };
+template<>           struct next_state<So,    literal<'n'>> { using type = Son; };
+template<>           struct next_state<Son,   literal<'e'>> { using type = Se; };
+template<>           struct next_state<Son,   literal<'i'>> { using type = Sni; };
 // two
-template<>           struct next_state<St, literal<'w'>> { using type = Stw; };
-template<>           struct next_state<Stw, literal<'o'>> { using type = So; };
+template<>           struct next_state<St,    literal<'w'>> { using type = Stw; };
 // three
-template<>           struct next_state<St, literal<'h'>> { using type = Sth; };
-template<>           struct next_state<Sth, literal<'r'>> { using type = Sthr; };
-template<>           struct next_state<Sthr, literal<'e'>> { using type = Sthre; };
+template<>           struct next_state<St,    literal<'h'>> { using type = Sth; };
+template<>           struct next_state<Sth,   literal<'r'>> { using type = Sthr; };
+template<>           struct next_state<Sthr,  literal<'e'>> { using type = Sthre; };
 template<>           struct next_state<Sthre, literal<'i'>> { using type = Sei; };
-template<>           struct next_state<Sthre, literal<'e'>> { using type = Se; };
 // four
-template<>           struct next_state<Sf, literal<'o'>> { using type = Sfo; };
-template<>           struct next_state<Sfo, literal<'u'>> { using type = Sfou; };
-template<>           struct next_state<Sfo, literal<'n'>> { using type = Son; };
-template<>           struct next_state<Sfou, literal<'r'>> { using type = S0; };
+template<>           struct next_state<Sf,    literal<'o'>> { using type = Sfo; };
+template<>           struct next_state<Sfo,   literal<'u'>> { using type = Sfou; };
+template<>           struct next_state<Sfo,   literal<'n'>> { using type = Son; };
 // five
-template<>           struct next_state<Sf, literal<'i'>> { using type = Sfi; };
-template<>           struct next_state<Sfi, literal<'v'>> { using type = Sfiv; };
-template<>           struct next_state<Sfiv, literal<'e'>> { using type = Se; };
+template<>           struct next_state<Sf,    literal<'i'>> { using type = Sfi; };
+template<>           struct next_state<Sfi,   literal<'v'>> { using type = Sfiv; };
 // six
-template<>           struct next_state<Ss, literal<'i'>> { using type = Ssi; };
-template<>           struct next_state<Ssi, literal<'x'>> { using type = S0; };
+template<>           struct next_state<Ss,    literal<'i'>> { using type = Ssi; };
 // seven
-template<>           struct next_state<Ss, literal<'e'>> { using type = Sse; };
-template<>           struct next_state<Sse, literal<'v'>> { using type = Ssev; };
-template<>           struct next_state<Sse, literal<'i'>> { using type = Sei; };
-template<>           struct next_state<Ssev, literal<'e'>> { using type = Sseve; };
-template<>           struct next_state<Sseve, literal<'n'>> { using type = Sn; };
+template<>           struct next_state<Ss,    literal<'e'>> { using type = Sse; };
+template<>           struct next_state<Sse,   literal<'v'>> { using type = Ssev; };
+template<>           struct next_state<Sse,   literal<'i'>> { using type = Sei; };
+template<>           struct next_state<Ssev,  literal<'e'>> { using type = Sseve; };
 template<>           struct next_state<Sseve, literal<'i'>> { using type = Sei; };
 // eight
-template<>           struct next_state<Se, literal<'i'>> { using type = Sei; };
-template<>           struct next_state<Sei, literal<'g'>> { using type = Seig; };
-template<>           struct next_state<Seig, literal<'h'>> { using type = Seigh; };
-template<>           struct next_state<Seigh, literal<'t'>> { using type = St; };
+template<>           struct next_state<Se,    literal<'i'>> { using type = Sei; };
+template<>           struct next_state<Sei,   literal<'g'>> { using type = Seig; };
+template<>           struct next_state<Seig,  literal<'h'>> { using type = Seigh; };
 // nine
-template<>           struct next_state<Sn, literal<'i'>> { using type = Sni; };
-template<>           struct next_state<Sni, literal<'n'>> { using type = Snin; };
-template<>           struct next_state<Snin, literal<'e'>> { using type = Se; };
+template<>           struct next_state<Sn,    literal<'i'>> { using type = Sni; };
+template<>           struct next_state<Sni,   literal<'n'>> { using type = Snin; };
+
 // digits
 template<typename S> struct next_state<S, literal<'0'>> { using type = S0; };
 template<typename S> struct next_state<S, literal<'1'>> { using type = S0; };
@@ -198,8 +191,6 @@ struct LineState {
     using state = MatchState;
     using first = First;
     using last = Last;
-
-    using have_first = is_nil<first>::type;
 };
 
 template <typename L, typename R>
