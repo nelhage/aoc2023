@@ -85,42 +85,30 @@ template<>           struct next_state<Seig,  literal<'h'>> { using type = Seigh
 template<>           struct next_state<Sn,    literal<'i'>> { using type = Sni; };
 template<>           struct next_state<Sni,   literal<'n'>> { using type = Snin; };
 
-// digits
-template<typename S> struct next_state<S, literal<'0'>> { using type = S0; };
-template<typename S> struct next_state<S, literal<'1'>> { using type = S0; };
-template<typename S> struct next_state<S, literal<'2'>> { using type = S0; };
-template<typename S> struct next_state<S, literal<'3'>> { using type = S0; };
-template<typename S> struct next_state<S, literal<'4'>> { using type = S0; };
-template<typename S> struct next_state<S, literal<'5'>> { using type = S0; };
-template<typename S> struct next_state<S, literal<'6'>> { using type = S0; };
-template<typename S> struct next_state<S, literal<'7'>> { using type = S0; };
-template<typename S> struct next_state<S, literal<'8'>> { using type = S0; };
-template<typename S> struct next_state<S, literal<'9'>> { using type = S0; };
-
 // Producing digits
 template <typename State, typename El>
-struct matched_digit { using type = nil; };
+struct match_digit { using type = nil; };
 
-template <> struct matched_digit<Son, literal<'e'>> { using type = literal<1>; };
-template <> struct matched_digit<Stw, literal<'o'>> { using type = literal<2>; };
-template <> struct matched_digit<Sthre, literal<'e'>> { using type = literal<3>; };
-template <> struct matched_digit<Sfou, literal<'r'>> { using type = literal<4>; };
-template <> struct matched_digit<Sfiv, literal<'e'>> { using type = literal<5>; };
-template <> struct matched_digit<Ssi, literal<'x'>> { using type = literal<6>; };
-template <> struct matched_digit<Sseve, literal<'n'>> { using type = literal<7>; };
-template <> struct matched_digit<Seigh, literal<'t'>> { using type = literal<8>; };
-template <> struct matched_digit<Snin, literal<'e'>> { using type = literal<9>; };
+template <> struct match_digit<Son,   literal<'e'>> { using type = literal<1>; };
+template <> struct match_digit<Stw,   literal<'o'>> { using type = literal<2>; };
+template <> struct match_digit<Sthre, literal<'e'>> { using type = literal<3>; };
+template <> struct match_digit<Sfou,  literal<'r'>> { using type = literal<4>; };
+template <> struct match_digit<Sfiv,  literal<'e'>> { using type = literal<5>; };
+template <> struct match_digit<Ssi,   literal<'x'>> { using type = literal<6>; };
+template <> struct match_digit<Sseve, literal<'n'>> { using type = literal<7>; };
+template <> struct match_digit<Seigh, literal<'t'>> { using type = literal<8>; };
+template <> struct match_digit<Snin,  literal<'e'>> { using type = literal<9>; };
 
-template<typename S> struct matched_digit<S, literal<'0'>> { using type = literal<0>; };
-template<typename S> struct matched_digit<S, literal<'1'>> { using type = literal<1>; };
-template<typename S> struct matched_digit<S, literal<'2'>> { using type = literal<2>; };
-template<typename S> struct matched_digit<S, literal<'3'>> { using type = literal<3>; };
-template<typename S> struct matched_digit<S, literal<'4'>> { using type = literal<4>; };
-template<typename S> struct matched_digit<S, literal<'5'>> { using type = literal<5>; };
-template<typename S> struct matched_digit<S, literal<'6'>> { using type = literal<6>; };
-template<typename S> struct matched_digit<S, literal<'7'>> { using type = literal<7>; };
-template<typename S> struct matched_digit<S, literal<'8'>> { using type = literal<8>; };
-template<typename S> struct matched_digit<S, literal<'9'>> { using type = literal<9>; };
+template<typename S> struct match_digit<S, literal<'0'>> { using type = literal<0>; };
+template<typename S> struct match_digit<S, literal<'1'>> { using type = literal<1>; };
+template<typename S> struct match_digit<S, literal<'2'>> { using type = literal<2>; };
+template<typename S> struct match_digit<S, literal<'3'>> { using type = literal<3>; };
+template<typename S> struct match_digit<S, literal<'4'>> { using type = literal<4>; };
+template<typename S> struct match_digit<S, literal<'5'>> { using type = literal<5>; };
+template<typename S> struct match_digit<S, literal<'6'>> { using type = literal<6>; };
+template<typename S> struct match_digit<S, literal<'7'>> { using type = literal<7>; };
+template<typename S> struct match_digit<S, literal<'8'>> { using type = literal<8>; };
+template<typename S> struct match_digit<S, literal<'9'>> { using type = literal<9>; };
 
 
 // Minimal self-test
@@ -130,7 +118,7 @@ using std::is_same;
 template <typename St, typename El>
 struct TestF {
     using new_state = next_state<typename St::head, El>::type;
-    using digit = matched_digit<typename St::head, El>::type;
+    using digit = match_digit<typename St::head, El>::type;
 
     using type = pair<new_state,
                       typename append<typename St::tail, digit>::type>;
@@ -162,7 +150,7 @@ struct CalibrationState {
 template <typename State, typename El>
 struct LineF {
     using new_state = next_state<typename State::state, El>::type;
-    using digit = matched_digit<typename State::state, El>::type;
+    using digit = match_digit<typename State::state, El>::type;
 
     using type = CalibrationState<
         new_state,
