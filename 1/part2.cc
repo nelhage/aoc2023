@@ -3,43 +3,6 @@
 #include "list.h"
 #include "read_input.h"
 
-template <typename Head, typename Tail>
-struct pair {
-    using head = Head;
-    using tail = Tail;
-};
-
-
-template <template<typename, typename> typename Fn, typename Delim>
-struct fold_lines_f {
-    template <typename In, typename Elt>
-    struct F{
-        using type = pair<
-            typename append<typename In::head, Elt>::type,
-            typename In::tail
-            >;
-    };
-
-    template <typename A>
-    struct F<A, Delim>{
-        using type = pair<
-            list<>,
-            typename Fn<typename A::tail, typename A::head>::type
-            >;
-    };
-};
-
-template<template<typename, typename> typename Fn,
-         typename Init,
-         typename L,
-         typename Delim = literal<'\n'>>
-struct fold_lines {
-    using type = fold<
-        fold_lines_f<Fn, Delim>::template F,
-        pair<list<>, Init>,
-        L>::type::tail;
-};
-
 // Parsing state machine
 struct S0 {};
 
@@ -160,6 +123,10 @@ template<typename S> struct matched_digit<S, literal<'8'>> { using type = litera
 template<typename S> struct matched_digit<S, literal<'9'>> { using type = literal<9>; };
 
 
+// Minimal self-test
+#include <type_traits>
+using std::is_same;
+
 template <typename St, typename El>
 struct TestF {
     using new_state = next_state<typename St::head, El>::type;
@@ -169,11 +136,9 @@ struct TestF {
                       typename append<typename St::tail, digit>::type>;
 };
 
-using test = read_input<'e', 'i', 'g', 'h', 't', 'w', 'o', 'n', 'e', 'x', '1'>::type;
-using got = fold<TestF, pair<S0, list<>>, test>::type;
-
-#include <type_traits>
-using std::is_same;
+using got = fold<TestF, pair<S0, list<>>,
+                 read_input<'e', 'i', 'g', 'h', 't', 'w', 'o', 'n', 'e', 'x', '1'>::type
+                 >::type;
 
 static_assert(is_same<got::head, S0>::value);
 static_assert(is_same<
@@ -186,21 +151,12 @@ static_assert(is_same<
               literal<1>>
               >::value);
 
+// Computing calibration values
 template <typename MatchState, typename First, typename Last>
-struct LineState {
+struct CalibrationState {
     using state = MatchState;
     using first = First;
     using last = Last;
-};
-
-template <typename L, typename R>
-struct or_else {
-    using type = L;
-};
-
-template <typename R>
-struct or_else<nil, R> {
-    using type = R;
 };
 
 template <typename State, typename El>
@@ -208,7 +164,7 @@ struct LineF {
     using new_state = next_state<typename State::state, El>::type;
     using digit = matched_digit<typename State::state, El>::type;
 
-    using type = LineState<
+    using type = CalibrationState<
         new_state,
         typename or_else<typename State::first, digit>::type,
         typename or_else<digit, typename State::last>::type
@@ -219,17 +175,12 @@ template<typename Line>
 struct calibration {
     using acc = fold<
         LineF,
-        LineState<S0, nil, nil>,
+        CalibrationState<S0, nil, nil>,
         Line
         >::type;
 
     using type = literal<acc::first::value*10 + acc::last::value>;
 };
-
-static_assert(is_same<
-              typename calibration<test>::type,
-              literal<81>
-              >::value);
 
 static_assert(is_same<
               typename calibration<typename read_input<

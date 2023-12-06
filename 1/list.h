@@ -5,6 +5,12 @@ struct literal {
     constexpr static auto value = v;
 };
 
+template <typename Head, typename Tail>
+struct pair {
+    using head = Head;
+    using tail = Tail;
+};
+
 struct nil;
 
 template <typename T>
@@ -15,6 +21,16 @@ struct is_nil {
 template <>
 struct is_nil<nil> {
     using type = literal<true>;
+};
+
+template <typename L, typename R>
+struct or_else {
+    using type = L;
+};
+
+template <typename R>
+struct or_else<nil, R> {
+    using type = R;
 };
 
 template <typename... Elts>
@@ -30,7 +46,6 @@ struct append<list<Elts...>, E> {
 
 template <typename L, typename E>
 struct prepend {};
-
 
 template <typename E, typename... Elts>
 struct prepend<E, list<Elts...>> {
@@ -71,4 +86,34 @@ struct fold<Fn, Init, list<Elts...>> {
     using F = fold_helper<Fn>::template F<T>;
 
     using type = decltype((F<Init>() << ... << F<Elts>()))::type;
+};
+
+template <template<typename, typename> typename Fn, typename Delim>
+struct fold_lines_f {
+    template <typename In, typename Elt>
+    struct F{
+        using type = pair<
+            typename append<typename In::head, Elt>::type,
+            typename In::tail
+            >;
+    };
+
+    template <typename A>
+    struct F<A, Delim>{
+        using type = pair<
+            list<>,
+            typename Fn<typename A::tail, typename A::head>::type
+            >;
+    };
+};
+
+template<template<typename, typename> typename Fn,
+         typename Init,
+         typename L,
+         typename Delim = literal<'\n'>>
+struct fold_lines {
+    using type = fold<
+        fold_lines_f<Fn, Delim>::template F,
+        pair<list<>, Init>,
+        L>::type::tail;
 };
