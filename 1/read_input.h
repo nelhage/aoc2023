@@ -2,11 +2,11 @@
 
 #include "list.h"
 
-template <auto... Elts>
-struct char_list {
-    using type = typename literal_list<char(Elts)...>::type;
+template <auto... Elt>
+struct read_input{
+    using type = list<literal<char(Elt)>...>;
 };
 
-using problem = char_list<
+using problem = read_input<
     #include INPUT
 >::type;
