@@ -1,24 +1,13 @@
 #include <stdio.h>
 
+#include "primitives.h"
 #include "list.h"
 
-template <typename T> struct as_digit {using type = nil; };
-template <char v> struct as_digit<literal<v>> {
-    using l = literal<v >= '0'>;
-    using r = literal<v <= '9'>;
-
-    template <typename l, typename r>
-    struct impl {
-        using type = nil;
-    };
-
-    template <>
-    struct impl<literal<true>, literal<true>> {
-        using type = literal<v - '0'>;
-    };
-
-    using type = impl<l, r>::type;
-};
+template <typename T>
+using as_digit = if_else<
+    literal<T::value >= '0' && T::value <= '9'>,
+    literal<T::value - '0'>,
+    nil>;
 
 
 template <typename Accum, typename FirstDigit, typename LastDigit>
@@ -32,36 +21,27 @@ using empty_state = State<literal<0>, nil, nil>;
 
 template <typename In, typename Char>
 struct Fn {
-    template <typename newline, typename digit, typename first>
-    struct impl {
-        using type = In;
-    };
+    using digit = as_digit<Char>::type;
 
-    template <int digit>
-    struct impl<literal<false>, literal<digit>, nil> {
-        using type = State<typename In::accum, literal<digit>, literal<digit>>;
-    };
-
-    template <int digit, int first>
-    struct impl<literal<false>, literal<digit>, literal<first>> {
-        using type = State<typename In::accum,
-            literal<first>,
-            literal<digit>>;
-    };
-
-    template <int first>
-    struct impl<literal<true>, nil, literal<first>> {
+    struct IfNewline {
         using type = State<
             literal<In::accum::value + 10 * In::first::value + In::last::value>,
             nil,
             nil>;
     };
 
-    using type = impl<
+    using type = if_else<
         literal<Char::value == '\n'>,
-        typename as_digit<Char>::type,
-        typename In::first
-        >::type;
+        IfNewline,
+        if_else<
+            typename is_nil<digit>::type,
+            In,
+            typename if_else<
+                typename is_nil<typename In::first>::type,
+                State<typename In::accum, digit, digit>,
+                State<typename In::accum, typename In::first, digit>
+                >::type
+            >>::type::type;
 };
 
 

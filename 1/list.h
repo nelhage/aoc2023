@@ -1,37 +1,6 @@
 #pragma once
 
-template <auto v>
-struct literal {
-    constexpr static auto value = v;
-};
-
-template <typename Head, typename Tail>
-struct pair {
-    using head = Head;
-    using tail = Tail;
-};
-
-struct nil;
-
-template <typename T>
-struct is_nil {
-    using type = literal<false>;
-};
-
-template <>
-struct is_nil<nil> {
-    using type = literal<true>;
-};
-
-template <typename L, typename R>
-struct or_else {
-    using type = L;
-};
-
-template <typename R>
-struct or_else<nil, R> {
-    using type = R;
-};
+#include "primitives.h"
 
 template <typename... Elts>
 struct list {};
@@ -60,6 +29,7 @@ struct head<list<H, Elts...>> {
     using type = H;
 };
 
+// folds
 
 template <template<typename, typename> typename Fn,
     typename Init,
