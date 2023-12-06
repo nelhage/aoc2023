@@ -78,305 +78,102 @@ struct Sni {};
 struct Snin {};
 
 template <typename St, typename El>
-struct NextState {
-    using out = S0;
-    using digit = nil;
-};
+struct next_state { using type = S0; };
+
+// Initial letters
+template<typename S> struct next_state<S, literal<'o'>> { using type = So; };
+template<typename S> struct next_state<S, literal<'t'>> { using type = St; };
+template<typename S> struct next_state<S, literal<'f'>> { using type = Sf; };
+template<typename S> struct next_state<S, literal<'s'>> { using type = Ss; };
+template<typename S> struct next_state<S, literal<'e'>> { using type = Se; };
+template<typename S> struct next_state<S, literal<'n'>> { using type = Sn; };
 
 // one
-template<typename S>
-struct NextState<S, literal<'o'>> {
-    using out = So;
-    using digit = nil;
-};
-
-template<>
-struct NextState<So, literal<'n'>> {
-    using out = Son;
-    using digit = nil;
-};
-
-template<>
-struct NextState<Son, literal<'e'>> {
-    using out = Se;
-    using digit = literal<1>;
-};
-
-template<>
-struct NextState<Son, literal<'i'>> {
-    using out = Sni;
-    using digit = nil;
-};
-
+template<>           struct next_state<So, literal<'n'>> { using type = Son; };
+template<>           struct next_state<Son, literal<'e'>> { using type = Se; };
+template<>           struct next_state<Son, literal<'i'>> { using type = Sni; };
 // two
-template<typename S>
-struct NextState<S, literal<'t'>> {
-    using out = St;
-    using digit = nil;
-};
-
-template<>
-struct NextState<St, literal<'w'>> {
-    using out = Stw;
-    using digit = nil;
-};
-
-template<>
-struct NextState<Stw, literal<'o'>> {
-    using out = So;
-    using digit = literal<2>;
-};
-
+template<>           struct next_state<St, literal<'w'>> { using type = Stw; };
+template<>           struct next_state<Stw, literal<'o'>> { using type = So; };
 // three
-template<>
-struct NextState<St, literal<'h'>> {
-    using out = Sth;
-    using digit = nil;
-};
-
-template<>
-struct NextState<Sth, literal<'r'>> {
-    using out = Sthr;
-    using digit = nil;
-};
-
-template<>
-struct NextState<Sthr, literal<'e'>> {
-    using out = Sthre;
-    using digit = nil;
-};
-
-template<>
-struct NextState<Sthre, literal<'i'>> {
-    using out = Sei;
-    using digit = nil;
-};
-
-template<>
-struct NextState<Sthre, literal<'e'>> {
-    using out = Se;
-    using digit = literal<3>;
-};
-
+template<>           struct next_state<St, literal<'h'>> { using type = Sth; };
+template<>           struct next_state<Sth, literal<'r'>> { using type = Sthr; };
+template<>           struct next_state<Sthr, literal<'e'>> { using type = Sthre; };
+template<>           struct next_state<Sthre, literal<'i'>> { using type = Sei; };
+template<>           struct next_state<Sthre, literal<'e'>> { using type = Se; };
 // four
-template<typename S>
-struct NextState<S, literal<'f'>> {
-    using out = Sf;
-    using digit = nil;
-};
-
-template<>
-struct NextState<Sf, literal<'o'>> {
-    using out = Sfo;
-    using digit = nil;
-};
-
-template<>
-struct NextState<Sfo, literal<'u'>> {
-    using out = Sfou;
-    using digit = nil;
-};
-
-template<>
-struct NextState<Sfo, literal<'n'>> {
-    using out = Son;
-    using digit = nil;
-};
-
-template<>
-struct NextState<Sfou, literal<'r'>> {
-    using out = S0;
-    using digit = literal<4>;
-};
-
+template<>           struct next_state<Sf, literal<'o'>> { using type = Sfo; };
+template<>           struct next_state<Sfo, literal<'u'>> { using type = Sfou; };
+template<>           struct next_state<Sfo, literal<'n'>> { using type = Son; };
+template<>           struct next_state<Sfou, literal<'r'>> { using type = S0; };
 // five
-template<>
-struct NextState<Sf, literal<'i'>> {
-    using out = Sfi;
-    using digit = nil;
-};
-
-template<>
-struct NextState<Sfi, literal<'v'>> {
-    using out = Sfiv;
-    using digit = nil;
-};
-
-template<>
-struct NextState<Sfiv, literal<'e'>> {
-    using out = Se;
-    using digit = literal<5>;
-};
-
+template<>           struct next_state<Sf, literal<'i'>> { using type = Sfi; };
+template<>           struct next_state<Sfi, literal<'v'>> { using type = Sfiv; };
+template<>           struct next_state<Sfiv, literal<'e'>> { using type = Se; };
 // six
-template<typename S>
-struct NextState<S, literal<'s'>> {
-    using out = Ss;
-    using digit = nil;
-};
-
-template<>
-struct NextState<Ss, literal<'i'>> {
-    using out = Ssi;
-    using digit = nil;
-};
-
-template<>
-struct NextState<Ssi, literal<'x'>> {
-    using out = S0;
-    using digit = literal<6>;
-};
-
+template<>           struct next_state<Ss, literal<'i'>> { using type = Ssi; };
+template<>           struct next_state<Ssi, literal<'x'>> { using type = S0; };
 // seven
-template<>
-struct NextState<Ss, literal<'e'>> {
-    using out = Sse;
-    using digit = nil;
-};
-
-template<>
-struct NextState<Sse, literal<'v'>> {
-    using out = Ssev;
-    using digit = nil;
-};
-
-template<>
-struct NextState<Sse, literal<'i'>> {
-    using out = Sei;
-    using digit = nil;
-};
-
-template<>
-struct NextState<Ssev, literal<'e'>> {
-    using out = Sseve;
-    using digit = nil;
-};
-
-template<>
-struct NextState<Sseve, literal<'n'>> {
-    using out = Sn;
-    using digit = literal<7>;
-};
-
-template<>
-struct NextState<Sseve, literal<'i'>> {
-    using out = Sei;
-    using digit = nil;
-};
-
+template<>           struct next_state<Ss, literal<'e'>> { using type = Sse; };
+template<>           struct next_state<Sse, literal<'v'>> { using type = Ssev; };
+template<>           struct next_state<Sse, literal<'i'>> { using type = Sei; };
+template<>           struct next_state<Ssev, literal<'e'>> { using type = Sseve; };
+template<>           struct next_state<Sseve, literal<'n'>> { using type = Sn; };
+template<>           struct next_state<Sseve, literal<'i'>> { using type = Sei; };
 // eight
-template<typename S>
-struct NextState<S, literal<'e'>> {
-    using out = Se;
-    using digit = nil;
-};
-
-template<>
-struct NextState<Se, literal<'i'>> {
-    using out = Sei;
-    using digit = nil;
-};
-
-template<>
-struct NextState<Sei, literal<'g'>> {
-    using out = Seig;
-    using digit = nil;
-};
-
-template<>
-struct NextState<Seig, literal<'h'>> {
-    using out = Seigh;
-    using digit = nil;
-};
-
-template<>
-struct NextState<Seigh, literal<'t'>> {
-    using out = St;
-    using digit = literal<8>;
-};
-
+template<>           struct next_state<Se, literal<'i'>> { using type = Sei; };
+template<>           struct next_state<Sei, literal<'g'>> { using type = Seig; };
+template<>           struct next_state<Seig, literal<'h'>> { using type = Seigh; };
+template<>           struct next_state<Seigh, literal<'t'>> { using type = St; };
 // nine
-template<typename S>
-struct NextState<S, literal<'n'>> {
-    using out = Sn;
-    using digit = nil;
-};
-
-template<>
-struct NextState<Sn, literal<'i'>> {
-    using out = Sni;
-    using digit = nil;
-};
-
-template<>
-struct NextState<Sni, literal<'n'>> {
-    using out = Snin;
-    using digit = nil;
-};
-
-template<>
-struct NextState<Snin, literal<'e'>> {
-    using out = Se;
-    using digit = literal<9>;
-};
-
+template<>           struct next_state<Sn, literal<'i'>> { using type = Sni; };
+template<>           struct next_state<Sni, literal<'n'>> { using type = Snin; };
+template<>           struct next_state<Snin, literal<'e'>> { using type = Se; };
 // digits
-template<typename S>
-struct NextState<S, literal<'0'>> {
-    using out = S0;
-    using digit = literal<0>;
-};
-template<typename S>
-struct NextState<S, literal<'1'>> {
-    using out = S0;
-    using digit = literal<1>;
-};
-template<typename S>
-struct NextState<S, literal<'2'>> {
-    using out = S0;
-    using digit = literal<2>;
-};
-template<typename S>
-struct NextState<S, literal<'3'>> {
-    using out = S0;
-    using digit = literal<3>;
-};
-template<typename S>
-struct NextState<S, literal<'4'>> {
-    using out = S0;
-    using digit = literal<4>;
-};
-template<typename S>
-struct NextState<S, literal<'5'>> {
-    using out = S0;
-    using digit = literal<5>;
-};
-template<typename S>
-struct NextState<S, literal<'6'>> {
-    using out = S0;
-    using digit = literal<6>;
-};
-template<typename S>
-struct NextState<S, literal<'7'>> {
-    using out = S0;
-    using digit = literal<7>;
-};
-template<typename S>
-struct NextState<S, literal<'8'>> {
-    using out = S0;
-    using digit = literal<8>;
-};
-template<typename S>
-struct NextState<S, literal<'9'>> {
-    using out = S0;
-    using digit = literal<9>;
-};
+template<typename S> struct next_state<S, literal<'0'>> { using type = S0; };
+template<typename S> struct next_state<S, literal<'1'>> { using type = S0; };
+template<typename S> struct next_state<S, literal<'2'>> { using type = S0; };
+template<typename S> struct next_state<S, literal<'3'>> { using type = S0; };
+template<typename S> struct next_state<S, literal<'4'>> { using type = S0; };
+template<typename S> struct next_state<S, literal<'5'>> { using type = S0; };
+template<typename S> struct next_state<S, literal<'6'>> { using type = S0; };
+template<typename S> struct next_state<S, literal<'7'>> { using type = S0; };
+template<typename S> struct next_state<S, literal<'8'>> { using type = S0; };
+template<typename S> struct next_state<S, literal<'9'>> { using type = S0; };
+
+// Producing digits
+template <typename State, typename El>
+struct matched_digit { using type = nil; };
+
+template <> struct matched_digit<Son, literal<'e'>> { using type = literal<1>; };
+template <> struct matched_digit<Stw, literal<'o'>> { using type = literal<2>; };
+template <> struct matched_digit<Sthre, literal<'e'>> { using type = literal<3>; };
+template <> struct matched_digit<Sfou, literal<'r'>> { using type = literal<4>; };
+template <> struct matched_digit<Sfiv, literal<'e'>> { using type = literal<5>; };
+template <> struct matched_digit<Ssi, literal<'x'>> { using type = literal<6>; };
+template <> struct matched_digit<Sseve, literal<'n'>> { using type = literal<7>; };
+template <> struct matched_digit<Seigh, literal<'t'>> { using type = literal<8>; };
+template <> struct matched_digit<Snin, literal<'e'>> { using type = literal<9>; };
+
+template<typename S> struct matched_digit<S, literal<'0'>> { using type = literal<0>; };
+template<typename S> struct matched_digit<S, literal<'1'>> { using type = literal<1>; };
+template<typename S> struct matched_digit<S, literal<'2'>> { using type = literal<2>; };
+template<typename S> struct matched_digit<S, literal<'3'>> { using type = literal<3>; };
+template<typename S> struct matched_digit<S, literal<'4'>> { using type = literal<4>; };
+template<typename S> struct matched_digit<S, literal<'5'>> { using type = literal<5>; };
+template<typename S> struct matched_digit<S, literal<'6'>> { using type = literal<6>; };
+template<typename S> struct matched_digit<S, literal<'7'>> { using type = literal<7>; };
+template<typename S> struct matched_digit<S, literal<'8'>> { using type = literal<8>; };
+template<typename S> struct matched_digit<S, literal<'9'>> { using type = literal<9>; };
+
 
 template <typename St, typename El>
 struct TestF {
-    using next = NextState<typename St::head, El>;
-    using type = pair<typename next::out,
-                      typename append<typename St::tail, typename next::digit>::type>;
+    using new_state = next_state<typename St::head, El>::type;
+    using digit = matched_digit<typename St::head, El>::type;
+
+    using type = pair<new_state,
+                      typename append<typename St::tail, digit>::type>;
 };
 
 using test = read_input<'e', 'i', 'g', 'h', 't', 'w', 'o', 'n', 'e', 'x', '1'>::type;
@@ -417,12 +214,13 @@ struct or_else<nil, R> {
 
 template <typename State, typename El>
 struct LineF {
-    using step = NextState<typename State::state, El>;
+    using new_state = next_state<typename State::state, El>::type;
+    using digit = matched_digit<typename State::state, El>::type;
 
     using type = LineState<
-        typename step::out,
-        typename or_else<typename State::first, typename step::digit>::type,
-        typename or_else<typename step::digit, typename State::last>::type
+        new_state,
+        typename or_else<typename State::first, digit>::type,
+        typename or_else<digit, typename State::last>::type
         >;
 };
 
@@ -543,9 +341,7 @@ template<typename State, typename Line>
 struct Fn {
     using lineval = calibration<Line>::type;
 
-    using type = literal<
-        State::value + lineval::value
-        >;
+    using type = literal<State::value + lineval::value>;
 };
 
 int main() {
