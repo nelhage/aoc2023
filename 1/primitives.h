@@ -23,15 +23,19 @@ struct pair {
     using tail = Tail;
 };
 
-template <typename If, typename Then, typename Else>
-struct if_else {
-    using type = Else;
-};
+template <typename Cond, typename Then, typename Else>
+struct if_else {};
 
 template <typename Then, typename Else>
 struct if_else<literal<true>, Then, Else> {
     using type = Then;
 };
+
+template <typename Then, typename Else>
+struct if_else<literal<false>, Then, Else> {
+    using type = Else;
+};
+
 
 template <typename L, typename R>
 struct or_else {

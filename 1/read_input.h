@@ -7,6 +7,14 @@ struct read_input{
     using type = list<literal<char(Elt)>...>;
 };
 
+
+#define _QUOTED(x) #x
+#define QUOTED(x) _QUOTED(x)
+
+#ifndef INPUT
+#define INPUT out/test.i
+#endif
+
 using problem = read_input<
-    #include INPUT
+#include QUOTED(INPUT)
 >::type;

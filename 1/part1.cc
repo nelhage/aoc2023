@@ -2,6 +2,7 @@
 
 #include "primitives.h"
 #include "list.h"
+#include "read_input.h"
 
 template <typename T>
 using as_digit = if_else<
@@ -44,24 +45,12 @@ struct Fn {
             >>::type::type;
 };
 
-
 template <typename T>
 struct solve {
     using type = fold<Fn, empty_state, T>::type::accum;
 };
 
-
-template <auto... Elt>
-struct read_input{
-    using type = list<literal<char(Elt)>...>;
-};
-
-using problem = read_input<
-    #include INPUT
->::type;
-
-
 int main() {
     using answer = solve<problem>::type;
-    printf("result=%d\n", answer::value);
+    printf("%d\n", answer::value);
 }
