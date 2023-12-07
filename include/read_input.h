@@ -12,7 +12,7 @@ struct read_input{
 #define QUOTED(x) _QUOTED(x)
 
 #ifndef INPUT
-#define INPUT out/test.i
+#define INPUT /dev/null
 #endif
 
 using problem = read_input<

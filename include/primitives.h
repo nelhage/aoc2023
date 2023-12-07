@@ -17,6 +17,17 @@ struct is_nil<nil> {
     using type = literal<true>;
 };
 
+template <typename T>
+struct not_nil {
+    using type = literal<true>;
+};
+
+template <>
+struct not_nil<nil> {
+    using type = literal<false>;
+};
+
+
 template <typename Head, typename Tail>
 struct pair {
     using head = Head;

@@ -5,6 +5,12 @@
 template <typename... Elts>
 struct list {};
 
+template <auto... Elts>
+struct value_list {
+    using type = list<literal<Elts>...>;
+};
+
+
 template <typename L, typename E>
 struct append {};
 
@@ -28,6 +34,15 @@ template <typename H, typename... Elts>
 struct head<list<H, Elts...>> {
     using type = H;
 };
+
+template <typename L>
+struct tail {};
+
+template <typename H, typename... Elts>
+struct tail<list<H, Elts...>> {
+    using type = list<Elts...>;
+};
+
 
 // folds
 
@@ -82,8 +97,59 @@ template<template<typename, typename> typename Fn,
          typename L,
          typename Delim = literal<'\n'>>
 struct fold_lines {
-    using type = fold<
+    using state = fold<
         fold_lines_f<Fn, Delim>::template F,
         pair<list<>, Init>,
-        L>::type::tail;
+        L>::type;
+    template <typename Final, typename State>
+    struct maybe_fold_final {
+        using type = typename Fn<State, Final>::type;
+    };
+
+    template <typename State>
+    struct maybe_fold_final<list<>, State> {
+        using type = State;
+    };
+
+    using type = maybe_fold_final<
+        typename state::head,
+        typename state::tail>::type;
+};
+
+// Convenience helpers for folds
+
+template <template<typename> typename Map>
+struct Any {
+    template <typename State, typename Arg>
+    struct Fn {};
+
+    template <typename Arg>
+    struct Fn<literal<true>, Arg> {
+        using type = literal<true>;
+    };
+
+    template <typename Arg>
+    struct Fn<literal<false>, Arg> {
+        using type = Map<Arg>::type;
+    };
+
+    using initial = literal<false>;
+};
+
+template <template<typename> typename Map>
+struct All {
+    template <typename State, typename Arg>
+    struct Fn {};
+
+    template <typename Arg>
+    struct Fn<literal<false>, Arg> {
+        using type = literal<false>;
+    };
+
+    template <typename Arg>
+    struct Fn<literal<true>, Arg> {
+        using type = Map<Arg>::type;
+    };
+
+    using initial = literal<true>;
 };

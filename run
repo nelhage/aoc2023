@@ -17,7 +17,7 @@ CXXFLAGS = [
 
 def check_call(echo, cmd, **kwargs):
   if echo:
-    print(f"+ ", shlex.join(cmd))
+    print(f"+ ", shlex.join(map(str, cmd)))
   return subprocess.check_call(cmd, **kwargs)
 
 def main():
@@ -35,7 +35,7 @@ def main():
 
   input = Path(args.input).absolute()
 
-  input_i = OUT / Path(input).relative_to(HERE)
+  input_i = OUT / Path(input).relative_to(HERE).with_suffix(".i")
   input_i.parent.mkdir(exist_ok=True, parents=True)
 
   src = Path(args.program).absolute()

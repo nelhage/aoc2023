@@ -3,12 +3,7 @@
 #include "primitives.h"
 #include "list.h"
 #include "read_input.h"
-
-template <typename T>
-using as_digit = if_else<
-    literal<T::value >= '0' && T::value <= '9'>,
-    literal<T::value - '0'>,
-    nil>;
+#include "parsing.h"
 
 
 template <typename Accum, typename FirstDigit, typename LastDigit>
