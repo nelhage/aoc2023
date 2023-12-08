@@ -5,6 +5,8 @@
 #include "read_input.h"
 #include "parsing.h"
 
+#include <type_traits>
+
 template <typename Red = literal<0>,
           typename Green = literal<0>,
           typename Blue = literal<0>>
@@ -24,16 +26,6 @@ struct min {
     using type = literal<(L::value < R::value ? L::value : R::value)>;
 };
 
-
-template <typename L, typename R>
-struct MinCounts {
-    using type = Counts<
-        typename min<typename L::red,   typename R::red>::type,
-        typename min<typename L::green, typename R::green>::type,
-        typename min<typename L::blue,  typename R::blue>::type
-        >;
-};
-
 template <typename L, typename R>
 struct MaxCounts {
     using type = Counts<
@@ -42,9 +34,6 @@ struct MaxCounts {
         typename max<typename L::blue,  typename R::blue>::type
         >;
 };
-
-
-#include <type_traits>
 
 using blue = value_list<'b', 'l', 'u', 'e'>::type;
 using red = value_list<'r', 'e', 'd'>::type;
