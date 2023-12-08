@@ -153,3 +153,13 @@ struct All {
 
     using initial = literal<true>;
 };
+
+template <template<typename> typename Map,
+          template<typename, typename> typename F
+          >
+struct MapFold {
+    template <typename State, typename Val>
+    struct Fn {
+        using type = F<State, typename Map<Val>::type>::type;
+    };
+};
