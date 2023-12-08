@@ -17,7 +17,7 @@ using empty_state = State<literal<0>, nil, nil>;
 
 template <typename In, typename Char>
 struct Fn {
-    using digit = as_digit<Char>::type;
+    using digit = typename as_digit<Char>::type;
 
     struct IfNewline {
         using type = State<
@@ -26,7 +26,7 @@ struct Fn {
             nil>;
     };
 
-    using type = if_else<
+    using type = typename if_else<
         literal<Char::value == '\n'>,
         IfNewline,
         if_else<
@@ -42,7 +42,7 @@ struct Fn {
 
 template <typename T>
 struct solve {
-    using type = fold<Fn, empty_state, T>::type::accum;
+    using type = typename fold<Fn, empty_state, T>::type::accum;
 };
 
 int main() {

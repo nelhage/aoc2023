@@ -59,13 +59,13 @@ struct good_draw {
     using split = split1<typename tail<Draw>::type,
         literal<' '>>;
 
-    using count = parse_int<typename split::head>::type;
-    using type = is_one_legal<typename split::tail, count>::type;
+    using count = typename parse_int<typename split::head>::type;
+    using type = typename is_one_legal<typename split::tail, count>::type;
 };
 
 template <typename Game>
 struct is_legal_game {
-    using type = fold_lines<
+    using type = typename fold_lines<
         typename All<good_draw>::Fn,
         typename All<good_draw>::initial,
         Game,
@@ -93,12 +93,12 @@ static_assert(is_same<
 
 template <typename Line>
 struct parse_line {
-    using rest = drop_until<Line, literal<' '>>::type;
+    using rest = typename drop_until<Line, literal<' '>>::type;
 
     using parseno = parse_int<rest>;
-    using gameno = parseno::type;
+    using gameno = typename parseno::type;
 
-    using is_legal = fold_lines<
+    using is_legal = typename fold_lines<
         typename All<is_legal_game>::Fn,
         typename All<is_legal_game>::initial,
         typename tail<typename parseno::rest>::type,

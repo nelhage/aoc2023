@@ -68,9 +68,9 @@ template <template<typename, typename> typename Fn,
           typename Init, typename... Elts>
 struct fold<Fn, Init, list<Elts...>> {
     template <typename T>
-    using F = fold_helper<Fn>::template F<T>;
+    using F = typename fold_helper<Fn>::template F<T>;
 
-    using type = decltype((F<Init>{} << ... << F<Elts>{}))::type;
+    using type = typename decltype((F<Init>{} << ... << F<Elts>{}))::type;
 };
 
 template <template<typename, typename> typename Fn, typename Delim>
@@ -97,7 +97,7 @@ template<template<typename, typename> typename Fn,
          typename L,
          typename Delim = literal<'\n'>>
 struct fold_lines {
-    using state = fold<
+    using state = typename fold<
         fold_lines_f<Fn, Delim>::template F,
         pair<list<>, Init>,
         L>::type;
@@ -111,7 +111,7 @@ struct fold_lines {
         using type = State;
     };
 
-    using type = maybe_fold_final<
+    using type = typename maybe_fold_final<
         typename state::head,
         typename state::tail>::type;
 };
@@ -130,7 +130,7 @@ struct Any {
 
     template <typename Arg>
     struct Fn<literal<false>, Arg> {
-        using type = Map<Arg>::type;
+        using type = typename Map<Arg>::type;
     };
 
     using initial = literal<false>;
@@ -148,7 +148,7 @@ struct All {
 
     template <typename Arg>
     struct Fn<literal<true>, Arg> {
-        using type = Map<Arg>::type;
+        using type = typename Map<Arg>::type;
     };
 
     using initial = literal<true>;
@@ -160,6 +160,6 @@ template <template<typename> typename Map,
 struct MapFold {
     template <typename State, typename Val>
     struct Fn {
-        using type = F<State, typename Map<Val>::type>::type;
+        using type = typename F<State, typename Map<Val>::type>::type;
     };
 };

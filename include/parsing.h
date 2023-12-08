@@ -18,7 +18,7 @@ struct drop_until<list<Find, Elts...>, Find> {
 
 template <typename...Elts, typename El1, typename Find>
 struct drop_until<list<El1, Elts...>, Find> {
-    using type = drop_until<list<Elts...>, Find>::type;
+    using type = typename drop_until<list<Elts...>, Find>::type;
 };
 
 template <typename Str, typename Accum=literal<0>>
@@ -32,25 +32,25 @@ struct parse_int<list<>, Accum> {
 
 template <typename El, typename... Elts, typename Accum>
 struct parse_int<list<El, Elts...>, Accum> {
-    using digit = as_digit<El>::type;
+    using digit = typename as_digit<El>::type;
 
     struct IfDigit {
         using advance = parse_int<list<Elts...>, literal<10*Accum::value + digit::value>>;
-        using rest = advance::rest;
-        using type = advance::type;
+        using rest = typename advance::rest;
+        using type = typename advance::type;
     };
     struct NotDigit {
         using rest = list<El, Elts...>;
         using type = Accum;
     };
-    using cond = if_else<
+    using cond = typename if_else<
         typename is_nil<digit>::type,
         NotDigit,
         IfDigit
         >::type;
 
-    using rest = cond::rest;
-    using type = cond::type;
+    using rest = typename cond::rest;
+    using type = typename cond::type;
 };
 
 template <typename L, typename E>
@@ -72,6 +72,6 @@ template <typename... Elts, typename H, typename E>
 struct split1<list<H, Elts...>, E> {
     using recurse = split1<list<Elts...>, E>;
 
-    using head = prepend<H, typename recurse::head>::type;
+    using head = typename prepend<H, typename recurse::head>::type;
     using tail = typename recurse::tail;;
 };

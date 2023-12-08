@@ -74,14 +74,14 @@ template <typename In, typename Draw>
 struct UpdateCounts {
     using split = split1<typename tail<Draw>::type,
         literal<' '>>;
-    using count = parse_int<typename split::head>::type;
+    using count = typename parse_int<typename split::head>::type;
 
-    using type = update_color<In, typename split::tail, count>::type;
+    using type = typename update_color<In, typename split::tail, count>::type;
 };
 
 template <typename Game>
 struct GameCounts {
-    using type = fold_lines<
+    using type = typename fold_lines<
         UpdateCounts,
         Counts<>,
         Game,
@@ -118,12 +118,12 @@ struct GameCounts_test {
 
 template <typename Line>
 struct line_power {
-    using rest = drop_until<Line, literal<' '>>::type;
+    using rest = typename drop_until<Line, literal<' '>>::type;
 
     using parseno = parse_int<rest>;
-    using gameno = parseno::type;
+    using gameno = typename parseno::type;
 
-    using max_counts = fold_lines<
+    using max_counts = typename fold_lines<
         typename MapFold<GameCounts, MaxCounts>::Fn,
         Counts<>,
         typename tail<typename parseno::rest>::type,

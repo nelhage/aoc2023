@@ -117,8 +117,8 @@ using std::is_same;
 
 template <typename St, typename El>
 struct TestF {
-    using new_state = next_state<typename St::head, El>::type;
-    using digit = match_digit<typename St::head, El>::type;
+    using new_state = typename next_state<typename St::head, El>::type;
+    using digit = typename match_digit<typename St::head, El>::type;
 
     using type = pair<new_state,
                       typename append<typename St::tail, digit>::type>;
@@ -149,8 +149,8 @@ struct CalibrationState {
 
 template <typename State, typename El>
 struct LineF {
-    using new_state = next_state<typename State::state, El>::type;
-    using digit = match_digit<typename State::state, El>::type;
+    using new_state = typename next_state<typename State::state, El>::type;
+    using digit = typename match_digit<typename State::state, El>::type;
 
     using type = CalibrationState<
         new_state,
@@ -161,7 +161,7 @@ struct LineF {
 
 template<typename Line>
 struct calibration {
-    using acc = fold<
+    using acc = typename fold<
         LineF,
         CalibrationState<S0, nil, nil>,
         Line
@@ -269,7 +269,7 @@ static_assert(is_same<
 
 template<typename State, typename Line>
 struct Fn {
-    using lineval = calibration<Line>::type;
+    using lineval = typename calibration<Line>::type;
 
     using type = literal<State::value + lineval::value>;
 };
