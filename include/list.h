@@ -59,7 +59,7 @@ struct fold_helper {
 
         template <typename R>
         auto operator<<(F<R>) {
-            return F<typename Fn<T, R>::type>();
+            return F<typename Fn<T, R>::type>{};
         };
     };
 };
@@ -70,7 +70,7 @@ struct fold<Fn, Init, list<Elts...>> {
     template <typename T>
     using F = fold_helper<Fn>::template F<T>;
 
-    using type = decltype((F<Init>() << ... << F<Elts>()))::type;
+    using type = decltype((F<Init>{} << ... << F<Elts>{}))::type;
 };
 
 template <template<typename, typename> typename Fn, typename Delim>
