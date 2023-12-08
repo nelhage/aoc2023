@@ -14,6 +14,7 @@ CXXFLAGS = [
   '-I',
   HERE/'include',
 ]
+CXX = os.getenv('CXX', 'c++')
 
 def check_call(echo, cmd, **kwargs):
   if echo:
@@ -49,7 +50,7 @@ def main():
                  ['xxd', '-i'], stdin=fin, stdout=fout)
 
   check_call(args.echo, [
-    'c++', '-o', out_bin, src, '-D', f"INPUT={input_i}",
+    CXX, '-o', out_bin, src, '-D', f"INPUT={input_i}",
     ] + CXXFLAGS)
 
   subprocess.check_call([out_bin])
