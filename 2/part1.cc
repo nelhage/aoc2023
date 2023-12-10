@@ -9,7 +9,7 @@
 using std::is_same;
 
 struct test_parse_int {
-    using test = typename value_list<'1', '0', '1', 'x'>::type;
+    using test = decltype("101x"_str);
     using got = parse_int<test>;
 
     static_assert(is_same<got::type, literal<101> >::value);
@@ -19,9 +19,9 @@ struct test_parse_int {
 template <typename Color, typename Value>
 struct is_one_legal {};
 
-using blue = value_list<'b', 'l', 'u', 'e'>::type;
-using red = value_list<'r', 'e', 'd'>::type;
-using green = value_list<'g', 'r', 'e', 'e', 'n'>::type;
+using blue = decltype("blue"_str);
+using red = decltype("red"_str);
+using green = decltype("green"_str);
 
 template <typename Value>
 struct is_one_legal<blue, Value> {
@@ -74,20 +74,12 @@ struct is_legal_game {
 };
 
 static_assert(is_same<
-              typename is_legal_game<
-              typename value_list<' ', '3', ' ', 'b', 'l', 'u', 'e', ',', ' ', '4', ' ', 'r', 'e', 'd'>::type
-              >::type,
+              typename is_legal_game<decltype(" 3 blue, 4 red"_str)>::type,
               literal<true>
               >::value);
 
 static_assert(is_same<
-              typename is_legal_game<
-                typename value_list<
-                  ' ', '8', ' ', 'g', 'r', 'e', 'e', 'n', ',',
-                  ' ', '6', ' ', 'b', 'l', 'u', 'e', ',',
-                  ' ', '2', '0', ' ', 'r', 'e', 'd'
-                >::type
-              >::type,
+              typename is_legal_game<decltype(" 8 green, 6 blue, 20 red"_str)>::type,
               literal<false>
               >::value);
 
@@ -107,9 +99,7 @@ struct parse_line {
 };
 
 struct test_line {
-    using test = value_list<
-        'G', 'a', 'm', 'e', ' ', '3', ':', ' ', '8', ' ', 'g', 'r', 'e', 'e', 'n', ',', ' ', '6', ' ', 'b', 'l', 'u', 'e', ',', ' ', '2', '0', ' ', 'r', 'e', 'd', ';', ' ', '5', ' ', 'b', 'l', 'u', 'e', ',', ' ', '4', ' ', 'r', 'e', 'd', ',', ' ', '1', '3', ' ', 'g', 'r', 'e', 'e', 'n', ';', ' ', '5', ' ', 'g', 'r', 'e', 'e', 'n', ',', ' ', '1', ' ', 'r', 'e', 'd'
-        >::type;
+    using test = decltype("Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red"_str);
     using parsed = parse_line<test>;
     static_assert(is_same<
                   typename parsed::gameno,
@@ -120,9 +110,7 @@ struct test_line {
                   literal<false>
                   >::value);
 
-    using test2 = value_list<
-        'G', 'a', 'm', 'e', ' ', '1', ':', ' ', '3', ' ', 'b', 'l', 'u', 'e', ',', ' ', '4', ' ', 'r', 'e', 'd', ';', ' ', '1', ' ', 'r', 'e', 'd', ',', ' ', '2', ' ', 'g', 'r', 'e', 'e', 'n', ',', ' ', '6', ' ', 'b', 'l', 'u', 'e', ';', ' ', '2', ' ', 'g', 'r', 'e', 'e', 'n'
-        >::type;
+    using test2 = decltype("Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green"_str);
     using parse2 = parse_line<test2>;
     static_assert(is_same<
                   typename parse2::gameno,
@@ -133,9 +121,7 @@ struct test_line {
                   literal<true>
                   >::value);
 
-    using test3 = value_list<
-        'G', 'a', 'm', 'e', ' ', '4', ':', ' ', '1', ' ', 'g', 'r', 'e', 'e', 'n', ',', ' ', '3', ' ', 'r', 'e', 'd', ',', ' ', '6', ' ', 'b', 'l', 'u', 'e', ';', ' ', '3', ' ', 'g', 'r', 'e', 'e', 'n', ',', ' ', '6', ' ', 'r', 'e', 'd', ';', ' ', '3', ' ', 'g', 'r', 'e', 'e', 'n', ',', ' ', '1', '5', ' ', 'b', 'l', 'u', 'e', ',', ' ', '1', '4', ' ', 'r', 'e', 'd'
-        >::type;
+    using test3 = decltype("Game 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red"_str);
     using parse3 = parse_line<test3>;
     static_assert(is_same<
                   typename parse3::gameno,

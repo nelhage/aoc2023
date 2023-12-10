@@ -11,6 +11,7 @@ OUT = HERE/'out'
 CXXFLAGS = [
   '-std=c++20',
   '-fbracket-depth=25000',
+  '-Wno-gnu-string-literal-operator-template',
   '-I',
   HERE/'include',
 ]

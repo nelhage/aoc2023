@@ -125,7 +125,7 @@ struct TestF {
 };
 
 using got = fold<TestF, pair<S0, list<>>,
-                 read_input<'e', 'i', 'g', 'h', 't', 'w', 'o', 'n', 'e', 'x', '1'>::type
+                 decltype("eightwonex1"_str)
                  >::type;
 
 static_assert(is_same<got::head, S0>::value);
@@ -171,99 +171,67 @@ struct calibration {
 };
 
 static_assert(is_same<
-              typename calibration<typename read_input<
-              's', 'e', 'v', 'e', 'n', '8', '2', '6', '8', '3'
-              >::type>::type,
+              typename calibration<decltype("seven82683"_str)>::type,
               literal<73>>::value);
 
 static_assert(is_same<
-              typename calibration<typename read_input<
-              '0', '1'
-              >::type>::type,
+              typename calibration<decltype("01"_str)>::type,
               literal<1>>::value);
 
 static_assert(is_same<
-              typename calibration<typename read_input<
-              '1', '0'
-              >::type>::type,
+              typename calibration<decltype("10"_str)>::type,
               literal<10>>::value);
 
 static_assert(is_same<
-              typename calibration<typename read_input<
-              'o', 'n', 'e'
-              >::type>::type,
+              typename calibration<decltype("one"_str)>::type,
               literal<11>>::value);
 
 static_assert(is_same<
-              typename calibration<typename read_input<
-              't', 'w', 'o'
-              >::type>::type,
+              typename calibration<decltype("two"_str)>::type,
               literal<22>>::value);
 
 static_assert(is_same<
-              typename calibration<typename read_input<
-              't', 'h', 'r', 'e', 'e'
-              >::type>::type,
+              typename calibration<decltype("three"_str)>::type,
               literal<33>>::value);
 
 static_assert(is_same<
-              typename calibration<typename read_input<
-              'f', 'o', 'u', 'r'
-              >::type>::type,
+              typename calibration<decltype("four"_str)>::type,
               literal<44>>::value);
 
 static_assert(is_same<
-              typename calibration<typename read_input<
-              'f', 'i', 'v', 'e'
-              >::type>::type,
+              typename calibration<decltype("five"_str)>::type,
               literal<55>>::value);
 
 static_assert(is_same<
-              typename calibration<typename read_input<
-              's', 'i', 'x'
-              >::type>::type,
+              typename calibration<decltype("six"_str)>::type,
               literal<66>>::value);
 
 static_assert(is_same<
-              typename calibration<typename read_input<
-              's', 'e', 'v', 'e', 'n'
-              >::type>::type,
+              typename calibration<decltype("seven"_str)>::type,
               literal<77>>::value);
 
 static_assert(is_same<
-              typename calibration<typename read_input<
-              's', 'e', 'v', 'e', 'n', 'i', 'n', 'e'
-              >::type>::type,
+              typename calibration<decltype("sevenine"_str)>::type,
               literal<79>>::value);
 
 static_assert(is_same<
-              typename calibration<typename read_input<
-              'e', 'i', 'g', 'h', 't'
-              >::type>::type,
+              typename calibration<decltype("eight"_str)>::type,
               literal<88>>::value);
 
 static_assert(is_same<
-              typename calibration<typename read_input<
-              'e', 'i', 'g', 'h', 't', 'w', 'o'
-              >::type>::type,
+              typename calibration<decltype("eightwo"_str)>::type,
               literal<82>>::value);
 
 static_assert(is_same<
-              typename calibration<typename read_input<
-              'n', 'i', 'n', 'e'
-              >::type>::type,
+              typename calibration<decltype("nine"_str)>::type,
               literal<99>>::value);
 
 static_assert(is_same<
-              typename calibration<typename read_input<
-              'f', 'o', 'n', 'e'
-              >::type>::type,
+              typename calibration<decltype("fone"_str)>::type,
               literal<11>>::value);
 
 static_assert(is_same<
-              typename calibration<typename read_input<
-              '8'
-              >::type>::type,
+              typename calibration<decltype("8"_str)>::type,
               literal<88>>::value);
 
 

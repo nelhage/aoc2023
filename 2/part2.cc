@@ -35,9 +35,9 @@ struct MaxCounts {
         >;
 };
 
-using blue = value_list<'b', 'l', 'u', 'e'>::type;
-using red = value_list<'r', 'e', 'd'>::type;
-using green = value_list<'g', 'r', 'e', 'e', 'n'>::type;
+using blue = decltype("blue"_str);
+using red = decltype("red"_str);
+using green = decltype("green"_str);
 
 template <typename Counts, typename Color, typename Value>
 struct update_color {};
@@ -102,16 +102,12 @@ struct GameCounts_test {
     };
 
     using t1 = test_case<
-        typename value_list<
-            ' ', '3', ' ', 'b', 'l', 'u', 'e', ',', ' ', '4', ' ', 'r', 'e', 'd'
-            >::type,
+        decltype(" 3 blue, 4 red"_str),
         Counts<literal<4>, literal<0>, literal<3>>
         >::type;
 
     using t2 = test_case<
-        typename value_list<
-           ' ', '8', ' ', 'g', 'r', 'e', 'e', 'n', ',', ' ', '6', ' ', 'b', 'l', 'u', 'e', ',', ' ', '2', '0', ' ', 'r', 'e', 'd'
-            >::type,
+        decltype(" 8 green, 6 blue, 20 red"_str),
         Counts<literal<20>, literal<8>, literal<6>>
         >::type;
 };
