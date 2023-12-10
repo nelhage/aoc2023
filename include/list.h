@@ -43,6 +43,10 @@ struct tail<list<H, Elts...>> {
     using type = list<Elts...>;
 };
 
+// helper for string literals
+template <typename T, T... chars>
+constexpr list<literal<chars>...> operator""_str() { return { }; }
+
 
 // folds
 
