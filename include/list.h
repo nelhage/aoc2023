@@ -46,32 +46,33 @@ struct tail<list<H, Elts...>> {
 
 // folds
 
-template <template<typename, typename> typename Fn,
-    typename Init,
-    typename List>
-struct fold {};
+// Thanks to Gašper Ažman and Joshua Bronson for this faster fold
+// implementation.
+namespace _f {
+  template<template<typename, typename> typename Fn, typename T>
+  struct F;
 
-template<template<typename, typename> typename Fn>
-struct fold_helper {
-    template <typename T>
-    struct F {
-        using type = T;
+  template<template<typename, typename> typename Fn, typename T>
+  extern F<Fn, T> Fv;
 
-        template <typename R>
-        auto operator<<(F<R>) {
-            return F<typename Fn<T, R>::type>{};
-        };
-    };
-};
+  template<template<typename, typename> typename Fn, typename T>
+  auto R(F<Fn, T> const&) -> T;
 
-template <template<typename, typename> typename Fn,
-          typename Init, typename... Elts>
-struct fold<Fn, Init, list<Elts...>> {
-    template <typename T>
-    using F = typename fold_helper<Fn>::template F<T>;
+  template <template <typename, typename> typename Fn, typename T, typename R>
+  auto operator<<=(F<Fn, T> const&, F<Fn, R> const&) -> F<Fn, typename Fn<T, R>::type> const&;
 
-    using type = typename decltype((F<Init>{} << ... << F<Elts>{}))::type;
-};
+  template <template<typename, typename> typename Fn,
+      typename Init,
+      typename List>
+  struct fold {};
+  template <template<typename, typename> typename Fn,
+            typename Init, typename... Elts>
+  struct fold<Fn, Init, list<Elts...>> {
+      using type = decltype(R((Fv<Fn, Init> <<= ... <<= Fv<Fn, Elts>)));
+  };
+}
+
+using _f::fold;
 
 template <template<typename, typename> typename Fn, typename Delim>
 struct fold_lines_f {
